@@ -1,0 +1,342 @@
+{
+  "constants": {
+    "inputs": [
+      {
+        "name": "name",
+        "kind": "positional",
+        "type": [
+          "choices={'SunGM', 'MercuryGM', 'VenusGM', 'EarthGM', 'MoonGM', 'MarsBarycenterGM', 'JupiterBarycenterGM', 'SaturnBarycenterGM', 'UranusBarycenterGM', 'NeptuneBarycenterGM', 'PlutoBarycenterGM', 'LengthUnitEM', 'TimeUnitEM', 'MassUnitEM', 'EarthRadius', 'MoonRadius', 'LengthUnitSE', 'MassUnitSE', 'LightSpeed', 'SolarLuminosity', 'EarthReflectionRate', 'EML1', 'EML2', 'EML3', 'EML4', 'EML5', 'EML1d', 'EML2d', 'EML3d', 'EML4d', 'EML5d', 'EMLibrationPoints', 'EMLibrationPointsD', 'EarthGravity', 'EccentricityEM'}"
+        ],
+        "purpose": "Name of the constant to query",
+        "repeating": true
+      }
+    ]
+  },
+  "dynamics.crtbp": {
+    "inputs": [
+      {
+        "name": "t",
+        "kind": "required",
+        "type": "numeric",
+        "purpose": "Time"
+      },
+      {
+        "name": "X",
+        "kind": "required",
+        "type": "numeric",
+        "purpose": "State"
+      },
+      {
+        "name": "u",
+        "kind": "ordered",
+        "type": "numeric",
+        "purpose": "Control acceleration"
+      }
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'lyapunov'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L1', 'L2', 'L3'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target x-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'halo'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L1', 'L2', 'L3'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "type":"choices={'northern', 'southern'}", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target z-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'nrho'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L1', 'L2'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "type":"choices={'northern', 'southern'}", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target perilune z-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'nrho'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L3'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "type":"choices={'northern', 'southern'}", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target perigee z-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'vertical'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L1', 'L2', 'L3', 'L4', 'L5'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target z-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'axial'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L1', 'L2', 'L3'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "type":"choices={'northern', 'southern'}", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target x-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'axial'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L4', 'L5'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "type":"choices={'northern', 'southern'}", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target z-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'shortperiod', 'longperiod'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "type":"choices={'L4', 'L5'}", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'butterfly', 'dragonfly', 'dro3d'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "type":"choices={'northern', 'southern'}", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target z-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'dro'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target x-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'dpo'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target y-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'lpo'}", "purpose":"Orbit family"},
+      {"name":"location", "kind":"required", "purpose":"Libration point"},
+      {"name":"direction", "kind":"required", "type":"choices={'eastern', 'western'}", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target perilune x-amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_initstates": {
+    "inputs": [
+      {"name":"orbit", "kind":"required", "type":"choices={'resonant'}", "purpose":"Orbit family"},
+      {"name":"resonance", "kind":"required", "type":"choices={'1:1', '1:2', '1:3', '1:4', '2:1', '2:3', '3:1', '3:2', '3:4', '4:1', '4:3'}", "purpose":"Resonance ratio"},
+      {"name":"direction", "kind":"required", "purpose":"Orbit direction"},
+      {"name":"targetamps", "kind":"required", "type":["numeric"], "purpose":"Target perigee amplitude"},
+      {"name":"targetphases", "kind":"required", "type":["numeric"], "purpose":"Initial phase"},
+      {"name":"UseWarnings", "kind":"namevalue", "type":"logical", "purpose":"Whether to issue warnings"},
+      {"name":"UsePlot", "kind":"namevalue", "type":"logical", "purpose":"Whether to plot generated orbits"},
+      {"name":"InterpolationMethod", "kind":"namevalue", "type":"choices={'linear', 'makima', 'pchip', 'spline'}", "purpose":"Interpolation method"},
+      {"name":"DiffCorrFreeIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction free variables"},
+      {"name":"DiffCorrTargetIndex", "kind":"namevalue", "type":"numeric", "purpose":"Indices of differential-correction target variables"},
+      {"name":"DiffCorrIsPeriodFree", "kind":"namevalue", "type":"logical", "purpose":"Whether to correct the period"},
+      {"name":"DiffCorrIsHalfPeriod", "kind":"namevalue", "type":"logical", "purpose":"Whether to use half-period correction"},
+      {"name":"DiffCorrTolerance", "kind":"namevalue", "type":"numeric", "purpose":"Differential-correction tolerance"},
+      {"name":"DiffCorrMaxIterations", "kind":"namevalue", "type":"numeric", "purpose":"Maximum differential-correction iterations"},
+      {"name":"OdeOptions", "kind":"namevalue", "type":["struct"], "purpose":"ODE solver options"}
+    ]
+  },
+  "orbits.crtbp_diffcorrection": {
+    "inputs": [
+      {
+        "name": "initstates",
+        "kind": "required",
+        "type": "numeric",
+        "purpose": "CRTBP initial state"
+      },
+      {
+        "name": "period",
+        "kind": "required",
+        "type": "numeric",
+        "purpose": "Initial period"
+      },
+      {
+        "name": "freeIndex",
+        "kind": "required",
+        "type": "numeric",
+        "purpose": "Indices of state variables that may be corrected"
+      },
+      {
+        "name": "targetIndex",
+        "kind": "required",
+        "type": "numeric",
+        "purpose": "Indices of periodicity constraints"
+      },
+      {
+        "name": "IsPeriodFree",
+        "kind": "namevalue",
+        "type": "logical",
+        "purpose": "Whether to correct the period"
+      },
+      {
+        "name": "UseHalfPeriod",
+        "kind": "namevalue",
+        "type": "logical",
+        "purpose": "Whether to use half-period symmetry"
+      },
+      {
+        "name": "Tolerance",
+        "kind": "namevalue",
+        "type": "numeric",
+        "purpose": "Periodicity tolerance"
+      },
+      {
+        "name": "MaxIterations",
+        "kind": "namevalue",
+        "type": "numeric",
+        "purpose": "Maximum number of iterations"
+      },
+      {
+        "name": "OdeOptions",
+        "kind": "namevalue",
+        "type": "struct",
+        "purpose": "ODE solver options"
+      }
+    ]
+  }
+}
