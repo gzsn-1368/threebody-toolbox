@@ -1,6 +1,6 @@
 # Threebody Toolbox Open-Source Release
 
-This repository contains the open-source components of Threebody Toolbox.
+This repository is the open-source release of the Threebody Toolbox.
 The current release includes CRTBP dynamics, periodic-orbit initial-state
 generation, differential correction, and the corresponding orbit data.
 
