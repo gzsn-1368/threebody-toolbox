@@ -2,10 +2,11 @@
 
 Thank you for helping improve the Threebody Toolbox open-source release.
 
-Keep contributions focused on reproducible CRTBP orbit generation,
-differential correction, orbit data, or documentation. Do not add local
-absolute paths, proprietary data, compiled binaries, SPICE kernels, or
-unreviewed third-party code.
+Keep contributions focused on reproducible astrodynamics models, orbit
+generation, correction methods, data, or documentation. Do not add local
+absolute paths, proprietary data, compiled binaries, or unreviewed
+third-party code. Kernel or third-party updates must include their source,
+version, and redistribution notice.
 
 For pull requests:
 
@@ -17,6 +18,5 @@ For pull requests:
 - Update the README or function help when the public interface changes.
 
 Use English help text, portable paths constructed with `fullfile`, descriptive
-variable names, and deterministic examples. Preserve the normalized
-Earth--Moon rotating-frame convention unless a change is explicitly
-documented.
+variable names, and deterministic examples. State the coordinate frame and
+units for every public dynamics interface.

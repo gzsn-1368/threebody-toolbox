@@ -4,6 +4,12 @@
 *.log
 slprj/
 codegen/
+build/artifacts/
+*.mex*
+*.o
+*.obj
+*.a
+*.lib
 
 # Local editor and operating-system files
 .DS_Store

@@ -34,6 +34,27 @@
       }
     ]
   },
+  "dynamics.ephem": {
+    "inputs": [
+      {"name":"t", "kind":"required", "type":"numeric", "purpose":"SPICE ephemeris time in seconds past J2000 TDB"},
+      {"name":"X", "kind":"required", "type":"numeric", "purpose":"Moon-centred J2000 state"},
+      {"name":"u", "kind":"ordered", "type":"numeric", "purpose":"Control acceleration"},
+      {"name":"options", "kind":"ordered", "type":"struct", "purpose":"Options returned by dynamics.ephemoptions"}
+    ]
+  },
+  "dynamics.ephemoptions": {
+    "inputs": [
+      {"name":"EarthGravityModel", "kind":"namevalue", "type":"choices={'EGM2008', 'EGM96', 'EIGENGL04C'}", "purpose":"Earth gravity-field model"},
+      {"name":"EarthHarmonics", "kind":"namevalue", "type":"numeric", "purpose":"Earth gravity degree and order"},
+      {"name":"LunarGravityModel", "kind":"namevalue", "type":"choices={'LP165P', 'LP100K'}", "purpose":"Lunar gravity-field model"},
+      {"name":"LunarHarmonics", "kind":"namevalue", "type":"numeric", "purpose":"Lunar gravity degree and order"},
+      {"name":"FourthBody", "kind":"namevalue", "purpose":"Third-body selection"},
+      {"name":"Relativity", "kind":"namevalue", "type":"logical", "purpose":"Enable relativistic correction"},
+      {"name":"SolarRadiationPressure", "kind":"namevalue", "type":"choices={'cannonball', 'none'}", "purpose":"Solar-radiation-pressure model"},
+      {"name":"EarthAlbedo", "kind":"namevalue", "type":"logical", "purpose":"Enable Earth albedo"},
+      {"name":"RPCM", "kind":"namevalue", "type":"numeric", "purpose":"Radiation-pressure coefficient"}
+    ]
+  },
   "orbits.crtbp_initstates": {
     "inputs": [
       {"name":"orbit", "kind":"required", "type":"choices={'lyapunov'}", "purpose":"Orbit family"},

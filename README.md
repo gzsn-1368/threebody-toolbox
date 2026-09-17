@@ -1,13 +1,15 @@
 # Threebody Toolbox Open-Source Release
 
 This repository is the open-source release of the Threebody Toolbox.
-The current release includes CRTBP dynamics, periodic-orbit initial-state
-generation, differential correction, and the corresponding orbit data.
+It includes CRTBP orbit tools and a Moon-centred ephemeris model with its
+force-model source, SPICE kernels, and gravity-field data.
 
 ## Requirements
 
 - MATLAB R2020b or newer is recommended.
-- The examples in this release require MATLAB only.
+- A supported C compiler is required to build the ephemeris MEX file.
+- Git LFS is required when cloning the repository because the SPICE kernels
+  include large binary files.
 
 ## Installation
 
@@ -17,10 +19,23 @@ From MATLAB, run the installer in this repository:
 run('ToolboxInstall.m')
 ```
 
-`ToolboxInstall.m` adds the repository root to the current MATLAB session and
-does not modify the user's global MATLAB path. To make the path persistent,
-use MATLAB's Set Path dialog or call `savepath` explicitly after reviewing the
-path entry.
+`ToolboxInstall.m` adds the repository root, the kernel directory, and the
+CRTBP orbit-data directory to the MATLAB path. It runs `startup.m` to
+configure `SPICE_KERNEL_PATH`, attempts to build the platform-specific
+ephemeris MEX file if it is missing, and calls `savepath` so the paths remain
+available in future MATLAB sessions.
+
+The CRTBP functions can be used immediately. If automatic MEX compilation
+fails, select a C compiler and retry the build manually:
+
+```matlab
+mex -setup C
+run(fullfile('build', 'build_forcemodel.m'))
+```
+
+The build supports Apple Silicon and Intel macOS, 64-bit Linux, and 64-bit
+Windows. On Windows, start MATLAB from an x64 Native Tools Command Prompt if
+`cl.exe` and `lib.exe` are not already available on `PATH`.
 
 ## Quick start
 
@@ -46,11 +61,16 @@ The same workflow is available in
 [`examples/example_initial_state.m`](examples/example_initial_state.m) and
 [`examples/example_differential_correction.m`](examples/example_differential_correction.m).
 
+An ephemeris-model example is available in
+[`examples/example_ephemeris.m`](examples/example_ephemeris.m).
+
 ## Public API
 
 | Function | Purpose |
 | --- | --- |
 | `dynamics.crtbp` | CRTBP state derivative, Jacobian, and variational equations |
+| `dynamics.ephem` | Moon-centred ephemeris dynamics and variational equations |
+| `dynamics.ephemoptions` | Configure gravity, third-body, and radiation-pressure options |
 | `orbits.crtbp_initstates` | Interpolate and correct periodic-orbit initial states |
 | `orbits.crtbp_diffcorrection` | Correct a periodic-orbit state by single shooting |
 | `constants` | Query physical and Earth--Moon CRTBP constants |
@@ -89,20 +109,61 @@ Some families have multiple branches for the same amplitude. When that
 happens, the function returns multiple rows and records the matched values in
 `info.targetamps` and `info.targetphases`.
 
+`dynamics.ephem` uses SPICE ephemeris time in seconds past J2000 TDB. Position,
+velocity, and acceleration are expressed in the Moon-centred J2000 inertial
+frame in km, km/s, and km/s^2. Its kernels and gravity-field data are stored in
+`kernels`; their paths are resolved relative to the repository.
+
+### Supported force models
+
+The ephemeris model always includes Earth and lunar gravity. The following
+models can be configured with `dynamics.ephemoptions`:
+
+- nonspherical Earth gravity using EGM2008, EGM96, or EIGEN-GL04C;
+- nonspherical lunar gravity using LP100K or LP165P;
+- gravitational perturbations from the Sun, Mercury, Venus, and the Mars,
+  Jupiter, Saturn, Uranus, Neptune, and Pluto barycentres;
+- relativistic acceleration correction;
+- cannonball solar radiation pressure, including Earth and lunar eclipses;
+- Earth-albedo acceleration.
+
+By default, the model uses EGM2008 degree/order `[2, 0]`, LP165P degree/order
+`[1, 0]`, solar gravity, and cannonball solar radiation pressure. Relativistic
+and Earth-albedo corrections are disabled by default. A user-supplied control
+acceleration can also be passed directly to `dynamics.ephem`.
+
 ## References
 
-1. V. Szebehely, *Theory of Orbits: The Restricted Problem of Three Bodies*,
+If you use this toolbox, cite at least one of References 1 and 2.
+
+1. H. Hu, Z. Guo, Y. Liu, B. Jiang, G. Wen, and Y. Meng, “Relative motion
+   configuration design and control of libration point orbits under
+   high-fidelity ephemeris model,” *Aerospace Science and Technology*, 176,
+   112697, 2026. https://doi.org/10.1016/j.ast.2026.112697
+2. H. Hu, Z. Guo, Y. Liu, B. Jiang, G. Wen, and Y. Meng, “Fuel-optimal
+   guidance between passively safe hold points for NRHO rendezvous,”
+   *Aerospace Science and Technology*, 178, 113140, 2026.
+   https://doi.org/10.1016/j.ast.2026.113140
+3. V. Szebehely, *Theory of Orbits: The Restricted Problem of Three Bodies*,
    Academic Press, 1967.
-2. D. L. Richardson, “Analytic construction of periodic orbits about the
+4. D. L. Richardson, “Analytic construction of periodic orbits about the
    collinear points,” *Celestial Mechanics*, 22, 241–253, 1980.
-3. K. C. Howell, “Three-dimensional, periodic, halo orbits,” *Celestial
+5. K. C. Howell, “Three-dimensional, periodic, halo orbits,” *Celestial
    Mechanics*, 32, 53–71, 1984.
-4. W. S. Koon, M. W. Lo, J. E. Marsden, and S. D. Ross, *Dynamical Systems,
+6. W. S. Koon, M. W. Lo, J. E. Marsden, and S. D. Ross, *Dynamical Systems,
    the Three-Body Problem and Space Mission Design*, Springer, 2007.
+7. C. H. Acton, “Ancillary data services of NASA's Navigation and Ancillary
+   Information Facility,” *Planetary and Space Science*, 44(1), 65–70, 1996.
+8. C. H. Acton, N. J. Bachman, B. A. Semenov, and E. M. Wright, “A look
+   toward the future in the handling of space science mission geometry,”
+   *Planetary and Space Science*, 150, 9–12, 2018.
 
 ## License
 
-This project is released under the MIT License. See [`LICENSE`](LICENSE).
+The original Threebody Toolbox code is released under the MIT License. See
+[`LICENSE`](LICENSE). CSPICE, kernels, and gravity-field data retain their
+respective third-party terms and provenance; see
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 ## Contributing
 
