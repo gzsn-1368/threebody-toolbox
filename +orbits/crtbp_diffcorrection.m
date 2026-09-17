@@ -29,8 +29,8 @@ function [initstates, period, residual, exitflag] = crtbp_diffcorrection( ...
 %     INITSTATES     - Corrected six-element initial state, returned as a row.
 %     PERIOD         - Corrected period in normalized time units.
 %     RESIDUAL       - Final periodicity residual.
-%     EXITFLAG       - 1 if the correction converged; 0 if the iteration limit
-%                      was reached before convergence.
+%     EXITFLAG       - 1 if the correction converged; 0 if it stopped before
+%                      convergence.
 %
 %   See also ORBITS.CRTBP_INITSTATES.
 %
@@ -107,7 +107,7 @@ function [initstates, period, residual, exitflag] = crtbp_diffcorrection( ...
         [~, tmpstates] = ode113(@dynamics.crtbp, tspan, y0, odeOptions);
         finalstates = tmpstates(end, 1:6)';
         if isPeriodFree
-            tmp = dynamics.crtbp(period, finalstates); % Derivative at the endpoint.
+            tmp = dynamics.crtbp(tspan(end), finalstates); % Endpoint derivative.
         end
 
         % Compute the residual and check the stopping condition.
@@ -120,7 +120,12 @@ function [initstates, period, residual, exitflag] = crtbp_diffcorrection( ...
         % Compute the correction vector.
         STM = reshape(tmpstates(end, 7:42), 6, 6);
         if isPeriodFree
-            L = [STM(targetIndex, freeIndex), tmp(targetIndex)];
+            if useHalfPeriod
+                periodSensitivity = 0.5 * tmp(targetIndex);
+            else
+                periodSensitivity = tmp(targetIndex);
+            end
+            L = [STM(targetIndex, freeIndex), periodSensitivity];
         else
             L = STM(targetIndex, freeIndex);
         end 
@@ -130,16 +135,37 @@ function [initstates, period, residual, exitflag] = crtbp_diffcorrection( ...
             b = -finalstates(targetIndex) + initstates(targetIndex);
         end
         correction = pinv(L) * b;
-        sigma = 0.618;
 
-        % Apply the correction to the initial state.
-        initstates(freeIndex) = initstates(freeIndex) + correction(1:nfree);
-        if isPeriodFree
-            if useHalfPeriod
-                period = period + 2 * sigma * correction(end);
-            else
-                period = period + sigma * correction(end);
+        % Backtrack the Newton step to keep the correction on the local
+        % solution branch. This is especially important near folds, where
+        % an undamped step can converge to a distant periodic solution.
+        stepAccepted = false;
+        stepScale = 1;
+        for lineIter = 1:24
+            trialStates = initstates;
+            trialStates(freeIndex) = trialStates(freeIndex) + ...
+                stepScale * correction(1:nfree);
+            trialPeriod = period;
+            if isPeriodFree
+                trialPeriod = trialPeriod + stepScale * correction(end);
             end
+
+            if trialPeriod > 0
+                trialResidual = computeResidual(trialStates, trialPeriod, ...
+                    targetIndex, useHalfPeriod, odeOptions);
+                if isfinite(trialResidual) && trialResidual < residual
+                    initstates = trialStates;
+                    period = trialPeriod;
+                    stepAccepted = true;
+                    break;
+                end
+            end
+            stepScale = stepScale / 2;
+        end
+
+        if ~stepAccepted
+            exitflag = 0;
+            break;
         end
 
         numiter = numiter + 1;
@@ -152,4 +178,16 @@ function [initstates, period, residual, exitflag] = crtbp_diffcorrection( ...
     end
     % Return the state as a row vector.
     initstates = initstates.';
+end
+
+function residual = computeResidual(initstates, period, targetIndex, ...
+        useHalfPeriod, odeOptions)
+    if useHalfPeriod
+        tspan = [0, period / 2];
+    else
+        tspan = [0, period];
+    end
+    [~, states] = ode113(@dynamics.crtbp, tspan, initstates, odeOptions);
+    finalstates = states(end, 1:6).';
+    residual = norm(finalstates(targetIndex) - initstates(targetIndex));
 end
